@@ -20,8 +20,14 @@ jobs:
           submodules: true
           lfs: false
 
+      - name: Set Up Java 21  # ✅ Add this to ensure Java 21 is installed
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
       - name: Set Execute Permissions for mvnw
-        run: chmod +x mvnw  # ✅ Fixes the permission issue
+        run: chmod +x mvnw  # ✅ Ensure mvnw is executable
 
       - name: Build And Deploy
         id: builddeploy
@@ -30,11 +36,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BLACK_MEADOW_077B14A03 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-
-          # ✅ These must be indented properly under "with:"
-          app_location: "/"   # App source code path
-          api_location: "/api" # API source code path - optional
-          output_location: ""  # Built app content directory - optional
+          app_location: "/" # App source code path
+          api_location: "/api" # Api source code path - optional
+          output_location: "" # Built app content directory - optional
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
